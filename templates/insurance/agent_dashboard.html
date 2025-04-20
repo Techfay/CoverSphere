@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Agent Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .profile-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .profile-card .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .profile-details {
+            margin-left: 20px;
+        }
+        .profile-row {
+            display: flex;
+            align-items: center;
+        }
+        .performance-metrics {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .performance-metrics ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .performance-metrics li {
+            margin-bottom: 10px;
+        }
+        .logout-btn {
+            float: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% include "insurance/navbar.html" %}
+
+    <div class="container mt-5">
+        <!-- Logout Button -->
+        <a href="{% url 'logout_view' %}" class="btn btn-danger logout-btn">Logout</a>
+        
+        <!-- Welcome Message -->
+        <h2 class="text-center">Welcome, {{ agent_name }}!</h2>
+
+        <!-- Agent Profile Section -->
+        <div class="profile-card">
+            <div class="profile-row">
+                <div>
+                    {% if agent_profile.profile_pic %}
+                        <img src="{{ agent_profile.profile_pic.url }}" alt="Profile Picture" class="profile-pic">
+                    {% else %}
+                        <img src="{% static 'images/default-profile.png' %}" alt="Default Profile" class="profile-pic">
+                    {% endif %}
+                </div>
+                <div class="profile-details">
+                    <h4>{{ agent_name }}</h4>
+                    <p><strong>Mobile:</strong> {{ agent_profile.mobile }}</p>
+                    <p><strong>Email:</strong> {{ request.user.email }}</p>
+                    <p><strong>Address:</strong> {{ agent_profile.address }}</p>
+                    <p><strong>Status:</strong> 
+                        <span class="badge {% if agent_profile.is_active %}badge-success{% else %}badge-secondary{% endif %}">
+                            {% if agent_profile.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+       
+        <!-- All Policies Section -->
+        <div class="mt-5">
+            <h4>All Policies</h4>
+            <table class="table table-bordered mt-4">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Policy Name</th>
+                        <th>Category</th>
+                        <th>Sum Assurance</th>
+                        <th>Premium</th>
+                        <th>Tenure</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for policy in all_policies %}
+                        <tr>
+                            <td>{{ policy.policy_name }}</td>
+                            <td>{{ policy.category.category_name }}</td>
+                            <td>{{ policy.sum_assurance }}</td>
+                            <td>{{ policy.premium }}</td>
+                            <td>{{ policy.tenure }} months</td>
+                            <td>
+                                <a href="{% url 'edit-policy' policy.id %}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{% url 'delete-policy' policy.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No policies available.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="performance-metrics">
+            <h4>Performance Metrics</h4>
+            <ul>
+                <li><strong>Total Policies Sold:</strong> {{ total_policies_sold }}</li>
+                <li><strong>Total Claims Processed:</strong> {{ total_claims_processed }}</li>
+                <li><strong>Total Clients Managed:</strong> {{ total_clients_managed }}</li>
+                <li><strong>Current Commission Earned:</strong> ${{ current_commission_earned }}</li>
+            </ul>
+        </div>
+    </div>
+
+    {% include "insurance/footer.html" %}
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends 'customer/customerbase.html' %}
+{% block content %}
+
+<div class="container text-center">
+    <h2>Payment Successful!</h2>
+    <p>Your payment has been processed successfully. Generating your receipt...</p>
+    
+    <div id="countdown" class="mt-4" style="font-size: 30px; font-weight: bold;">
+        5
+    </div>
+    
+    <script type="text/javascript">
+        var countdown = 5;  // Start the countdown at 5 seconds
+        var countdownElement = document.getElementById("countdown");
+        
+        // Decrease countdown every second
+        var interval = setInterval(function() {
+            countdown--;
+            countdownElement.innerText = countdown;
+            
+            // When countdown reaches 0, redirect to the admin claims page
+            if (countdown <= 0) {
+                clearInterval(interval);
+                window.location.href = "{% url 'admin-claims' %}";
+            }
+        }, 1000);
+    </script>
+</div>
+
+{% endblock %}

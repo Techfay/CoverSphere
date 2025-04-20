@@ -1,0 +1,92 @@
+{% extends 'insurance/adminbase.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h4 {
+      text-align: center;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    label #sidebar_btn {
+      z-index: 1;
+      color: #fff;
+      position: fixed;
+      cursor: pointer;
+      left: 300px;
+      padding-left: 60px;
+      margin-top: 15px;
+      font-size: 20px;
+      transition: 0.5s;
+      transition-property: color;
+    }
+  </style>
+</head>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h4>Claims Management</h4>
+    </div>
+    <div class="card-body">
+      <table class="table table-hover table-bordered table-striped" id="dev-table">
+        <thead class="thead-dark">
+          <tr>
+            <th>Customer</th>
+            <th>Policy</th>
+            <th>Claim Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+            <th>Payment</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for claim in claims %}
+          <tr>
+            <td>{{ claim.policy_record.customer.get_name }}</td>
+            <td>{{ claim.policy_record.Policy.policy_name }}</td>
+            <td>{{ claim.claim_date }}</td>
+            <td>${{ claim.claim_amount }}</td>
+            <td>{{ claim.status }}</td>
+            <td>
+              {% if claim.payment_status != "Paid" %}
+                <a href="{% url 'process-claim' claim.id %}" class="btn btn-primary btn-sm">
+                  <span class="fa fa-cogs"></span> Process
+                </a>
+              {% endif %}
+            </td>
+            <td>
+              {% if claim.status == "Approved" and claim.payment_status == "Unpaid" %}
+                <a href="{% url 'process-claim-payment' claim.id %}" class="btn btn-success btn-sm">
+                  <span class="fa fa-money"></span> Pay
+                </a>
+              {% elif claim.status == "Rejected" %}
+                <button class="btn btn-danger btn-sm" disabled>Rejected</button>
+              {% else %}
+                <button class="btn btn-secondary btn-sm" disabled>Paid</button>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

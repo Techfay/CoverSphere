@@ -1,0 +1,102 @@
+{% extends 'insurance/adminbase.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h4, h5 {
+      text-align: center;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    label #sidebar_btn {
+      z-index: 1;
+      color: #fff;
+      position: fixed;
+      cursor: pointer;
+      left: 300px;
+      padding-left: 60px;
+      margin-top: 15px;
+      font-size: 20px;
+      transition: 0.5s;
+      transition-property: color;
+    }
+
+    .claim-details {
+      margin-bottom: 30px;
+      border: 1px solid #ddd;
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
+
+    .form-group label {
+      font-weight: bold;
+    }
+
+    .form-group textarea {
+      resize: none;
+    }
+  </style>
+</head>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h4>Process Claim</h4>
+    </div>
+    <div class="card-body">
+      <div class="claim-details mb-4">
+        <h5>Claim Details</h5>
+        <p><strong>Customer:</strong> {{ claim.policy_record.customer.get_name }}</p>
+        <p><strong>Policy:</strong> {{ claim.policy_record.Policy.policy_name }}</p>
+        <p><strong>Claim Amount:</strong> ${{ claim.claim_amount }}</p>
+        <p><strong>Reason:</strong> {{ claim.reason }}</p>
+        
+        <h6>Uploaded Documents</h6>
+        {% for doc in claim.claimdocument_set.all %}
+        <p>
+          <strong>{{ doc.document_type }}:</strong>
+          <a href="{{ doc.document.url }}" target="_blank">View Document</a>
+        </p>
+        {% endfor %}
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Status</label>
+          <select name="status" class="form-control">
+            <option value="Under Review">Under Review</option>
+            <option value="Approved">Approve</option>
+            <option value="Rejected">Reject</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Comment</label>
+          <textarea name="admin_comment" class="form-control" rows="4"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-sm">
+          <span class="fa fa-save"></span> Update Claim
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+ 

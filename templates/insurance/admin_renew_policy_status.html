@@ -1,0 +1,106 @@
+{% extends 'insurance/adminbase.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <style>
+    .container {
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+
+    .table thead {
+      background-color: #343a40;
+      color: #fff;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+      text-align: center;
+    }
+
+    .status-badge {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .badge-renewal {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .badge-active {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-renew {
+      background-color: #007bff;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    h2 {
+      color: #333;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<div class="container">
+  <h2 class="text-center mt-4">Policy Renewal Status</h2>
+  <div class="panel panel-primary mt-4">
+    <div class="panel-heading mb-3">
+      
+    </div>
+    <table class="table table-hover table-striped table-bordered" id="policy-table">
+      <thead class="thead-dark">
+        <tr>
+          <th>#</th>
+          <th>Policy Name</th>
+          <th>Customer</th>
+          <th>Start Date</th>
+          <th>Due Date</th>
+          <th>Renewal Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for policy in renewal_policies %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ policy.Policy.name }}</td>
+          <td>{{ policy.customer.name }}</td>
+          <td>{{ policy.start_date|date:"M d, Y" }}</td>
+          <td>{{ policy.due_date|date:"M d, Y" }}</td>
+          <td>
+            {% if policy.due_date <= today %}
+            <span class="badge badge-renewal status-badge">Due for Renewal</span>
+            {% else %}
+            <span class="badge badge-active status-badge">Active</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if policy.due_date <= today %}
+            <a href="{% url 'renew-policy' policy.id %}" class="btn btn-sm btn-renew">
+              <i class="fa fa-refresh" aria-hidden="true"></i> Renew Manually
+            </a>
+            {% else %}
+            <span class="text-muted">Not Due</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="text-center">No policies due for renewal</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock content %}

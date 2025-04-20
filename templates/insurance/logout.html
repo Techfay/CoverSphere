@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Logged Out</title>
+    <script>
+        // Redirect to index.html after 3 seconds
+        setTimeout(function() {
+            window.location.href = "{% url 'index' %}";
+        }, 3000);
+    </script>
+</head>
+<body>
+    {% include "insurance/navbar.html" %}
+    <br><br><br><br><br>
+    <h2 class="text-center">Logged Out Successfully. <br> Thank you for using our system!</h2>
+    <p class="text-center">You will be redirected to the home page shortly...</p>
+    <br><br><br><br><br>
+    {% include "insurance/footer.html" %}
+</body>
+</html>

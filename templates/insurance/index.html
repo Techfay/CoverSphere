@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoverSphere</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .dark-mode .hero-section {
+            background-image: url('{% static "image/background-dark.jpg" %}');
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            background-image: url('{% static "image/background.jpg" %}');
+            background-size: cover;
+            background-position: center right;
+            height: 600px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+            padding-left: 5%; /* Reduced padding to move content more to the left */
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2); /* Reduced overlay opacity for better visibility */
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding-top: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: #dc3545;
+            margin-bottom: 15px;
+        }
+
+        .hero-content p {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #f0f0f0;
+        }
+
+        .btn-signup {
+            background: linear-gradient(45deg, #dc3545, #e94e4e);
+            border: none;
+            border-radius: 5px;
+            padding: 18px 35px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-signup:hover {
+            background: #c82333;
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .section-divider {
+            width: 100%;
+            height: 50px;
+            background: url('{% static "image/section-divider.svg" %}') no-repeat center center;
+            background-size: cover;
+        }
+
+        .section h3 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .services-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .service {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 300px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .service:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: #dc3545;
+            margin-bottom: 15px;
+        }
+
+        .service h4 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .service p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .btn-outline-primary {
+            margin-top: 15px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .reviews {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .review {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 300px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .faq {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .faq-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 300px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-item:hover {
+            background: #eef1f5;
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #dc3545;
+            color: #fff;
+            border-radius: 50%;
+            padding: 15px;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .fab:hover {
+            background-color: #c82333;
+            transform: scale(1.1);
+        }
+
+        #heroVideo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+    </style>
+</head>
+<body>
+
+    {% include "insurance/navbar.html" %}
+
+    <!-- Dark Mode Toggle -->
+    <button id="darkModeToggle" class="btn btn-dark">Toggle Dark Mode</button>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>CoverSphere</h1>
+            <p>"Your Life, Fully Shielded Across Every Sphere."</p>
+            <a href="/customer/customersignup" class="btn btn-lg btn-signup"><i class="fa fa-user" aria-hidden="true"></i> Sign Up as Customer</a>
+            <a href="{% url 'agent-signup' %}" class="btn btn-lg btn-signup"><i class="fa fa-user-tie" aria-hidden="true"></i> Sign Up as Agent</a>
+            
+        </div>
+    </section>
+
+    <!-- Floating Action Button -->
+    <a href="#contact" class="fab">
+        <i class="fas fa-envelope"></i>
+    </a>
+
+    <!-- About Us Section -->
+    <div class="section-divider"></div>
+    <section id="about" class="section">
+        <div class="container">
+            <h3>About Us</h3>
+            <p>We are committed to providing reliable insurance solutions to secure your future and protect what matters most. With years of experience, our expert team is here to help you find the right policies tailored to your needs.</p>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <div class="section-divider"></div>
+    <section id="services" class="section">
+        <div class="container">
+            <h3>Our Services</h3>
+            <div class="services-list">
+                <div class="service">
+                    <i class="fas fa-heartbeat service-icon"></i>
+                    <h4>Health Insurance</h4>
+                    <p>Comprehensive plans to ensure your health and well-being are always protected.</p>
+                    <a href="/services/health-insurance" class="btn btn-outline-danger">Learn More</a>
+                </div>
+                <div class="service">
+                    <i class="fas fa-user-shield service-icon"></i>
+                    <h4>Life Insurance</h4>
+                    <p>Safeguard your loved ones' financial future with our reliable life insurance plans.</p>
+                    <a href="/services/life-insurance" class="btn btn-outline-danger">Learn More</a>
+                </div>
+                <div class="service">
+                    <i class="fas fa-car service-icon"></i>
+                    <h4>Auto Insurance</h4>
+                    <p>Protect your vehicle with coverage that keeps you moving without worry.</p>
+                    <a href="/services/auto-insurance" class="btn btn-outline-danger">Learn More</a>
+                </div>
+                <div class="service">
+                    <i class="fas fa-home service-icon"></i>
+                    <h4>Home Insurance</h4>
+                    <p>Comprehensive home protection plans to secure your property and belongings.</p>
+                    <a href="/services/home-insurance" class="btn btn-outline-danger">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Reviews Section -->
+    <div class="section-divider"></div>
+    <section id="reviews" class="section bg-light">
+        <div class="container">
+            <h3>What Our Customers Say</h3>
+            <div id="testimonialCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <p>"A seamless experience! They helped me find the perfect policy for my family."</p>
+                        <span>- Sarah L.</span>
+                    </div>
+                    <div class="carousel-item">
+                        <p>"The team is knowledgeable and approachable. Highly recommended."</p>
+                        <span>- Michael B.</span>
+                    </div>
+                    <div class="carousel-item">
+                        <p>"Excellent service and affordable policies. I feel more secure."</p>
+                        <span>- Jessica W.</span>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#testimonialCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#testimonialCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <div class="section-divider"></div>
+    <section id="faq" class="section">
+        <div class="container">
+            <h3>Frequently Asked Questions</h3>
+            <div class="faq">
+                <div class="faq-item">
+                    <i class="fas fa-question-circle service-icon"></i>
+                    <h5>How do I apply for an insurance policy?</h5>
+                    <p>Simply sign up and complete our easy online application process to get started.</p>
+                </div>
+                <div class="faq-item">
+                    <i class="fas fa-question-circle service-icon"></i>
+                    <h5>Can I customize my insurance policy?</h5>
+                    <p>Yes, our advisors can help tailor a policy to meet your specific needs.</p>
+                </div>
+                <div class="faq-item">
+                    <i class="fas fa-question-circle service-icon"></i>
+                    <h5>What documents are needed to apply?</h5>
+                    <p>Basic identification and proof of income are generally required.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include "insurance/footer.html" %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>
